@@ -3,7 +3,7 @@ import { scoreAccent } from "@/lib/score";
 
 export function RepoCard({ repo }: { repo: RepoEvaluation }) {
   return (
-    <div className="rounded-lg border border-line bg-card p-4 shadow-warm transition-transform duration-200 hover:-translate-y-0.5">
+    <div className="rounded-lg border border-line bg-card p-4 shadow-warm">
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-mono text-sm font-semibold text-ink">
           {repo.repoName}

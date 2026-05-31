@@ -8,7 +8,7 @@ interface MetricCardProps {
 
 export function MetricCard({ title, metric }: MetricCardProps) {
   return (
-    <div className="rounded-lg border border-line bg-card p-4 shadow-warm transition-transform duration-200 hover:-translate-y-0.5">
+    <div className="rounded-lg border border-line bg-card p-4 shadow-warm">
       <div className="flex items-baseline justify-between">
         <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.08em] text-muted">
           {title}
