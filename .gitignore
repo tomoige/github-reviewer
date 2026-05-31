@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets (keep *.example files tracked)
+.env
+.env.*
+!.env.example
+
+# Backend (Express + TypeScript)
+backend/dist/
+
+# Frontend (Next.js)
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+
+# Logs & debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors & IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Cursor (local agent/session state)
+.cursor/
+
+# Misc
+.vercel

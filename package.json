@@ -1,0 +1,14 @@
+{
+  "name": "gitreview-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitReview AI - instant AI-powered GitHub profile reviews (monorepo)",
+  "scripts": {
+    "backend": "node scripts/dev.js backend",
+    "frontend": "node scripts/dev.js frontend",
+    "dev": "node scripts/dev.js all",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build"
+  },
+  "license": "MIT"
+}
