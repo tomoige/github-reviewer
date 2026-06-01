@@ -8,9 +8,39 @@ export interface MetricBlock {
 
 export interface LanguageBreakdown {
   language: string;
+  repoCount: number;
   competencyRating: "Beginner" | "Intermediate" | "Advanced";
-  ratingRationale: string;
-  context: string;
+}
+
+export interface ContributionDay {
+  date: string;
+  count: number;
+  level: number;
+}
+
+export interface ContributionBreakdown {
+  commits: number;
+  pullRequests: number;
+  reviews: number;
+  issues: number;
+}
+
+export interface ContributionRepoSource {
+  fullName: string;
+  ownerLogin: string;
+  ownerType: "User" | "Organization";
+  isPrivate: boolean;
+  contributionCount: number;
+}
+
+export interface ContributionCalendar {
+  totalContributions: number;
+  weeks: ContributionDay[][];
+  includesPrivateContributions: boolean;
+  restrictedContributionCount?: number;
+  hasHiddenContributions: boolean;
+  breakdown: ContributionBreakdown;
+  repositories: ContributionRepoSource[];
 }
 
 export interface RepoEvaluation {
@@ -42,6 +72,30 @@ export interface ProfileCompleteness {
   missingHighImpactItems: string[];
 }
 
+export interface PinRecommendation {
+  repoName: string;
+  reason: string;
+  stars: number;
+  language: string | null;
+}
+
+export interface ActivitySnapshot {
+  reposScanned: number;
+  lastPushAt: string | null;
+  lastPushLabel: string;
+  activeInLast90Days: number;
+  dormantCount: number;
+  activePercent: number;
+  accountCreatedAt: string;
+  accountAgeLabel: string;
+}
+
+export interface RepositoryDeepDive {
+  mostRecent: RepoEvaluation[];
+  needsImprovement: RepoEvaluation[];
+  best: RepoEvaluation[];
+}
+
 export interface ReviewReport {
   overallScore: number;
   profileSummary: {
@@ -55,13 +109,16 @@ export interface ReviewReport {
     profilePresentation: MetricBlock;
   };
   languageBreakdownAnalysis: LanguageBreakdown[];
-  mostRecentRepositoriesEvaluated: RepoEvaluation[];
+  repositoryDeepDive: RepositoryDeepDive;
   personalizedRoadmap: {
     actionItems: RoadmapItem[];
     suggestedReadmeKeywords: string[];
   };
   executiveSummary: string;
+  suggestedProfileBio: string;
   profileCompleteness: ProfileCompleteness;
+  activitySnapshot: ActivitySnapshot;
+  pinRecommendations: PinRecommendation[];
 }
 
 export interface ProfileBasics {
@@ -87,4 +144,5 @@ export interface ReviewResponse {
   profile: ProfileBasics;
   report: ReviewReport;
   languageScan: LanguageScanMeta;
+  contributionCalendar: ContributionCalendar | null;
 }

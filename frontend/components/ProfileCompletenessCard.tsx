@@ -25,7 +25,7 @@ export function ProfileCompletenessCard({
   return (
     <div className="rounded-lg border border-line bg-card p-4 shadow-warm">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-base font-bold text-ink">Profile Completeness</h2>
+        <h3 className="text-base font-bold text-ink">Profile Completeness</h3>
         <span className="font-mono text-2xl font-bold text-primary">
           {completeness.score}
           <span className="text-xs font-normal text-muted">/100</span>
@@ -54,7 +54,7 @@ export function ProfileCompletenessCard({
             >
               {done ? "\u2713" : "\u2717"}
             </span>
-            <span className={done ? "text-ink/85" : "text-muted"}>
+            <span className={done ? "text-ink" : "text-muted"}>
               {CHECKLIST_LABELS[key]}
             </span>
           </li>
@@ -63,10 +63,8 @@ export function ProfileCompletenessCard({
 
       {completeness.missingHighImpactItems.length > 0 && (
         <div className="mt-4 rounded-lg border-l-2 border-primary bg-cardAlt p-3">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-muted">
-            Quick wins
-          </p>
-          <ul className="mt-1.5 space-y-0.5 text-[0.8rem] text-ink/85">
+          <p className="type-label">Quick wins</p>
+          <ul className="mt-1.5 space-y-0.5 text-sm text-ink">
             {completeness.missingHighImpactItems.map((item, i) => (
               <li key={i} className="flex gap-2">
                 <span className="text-primary">+</span>

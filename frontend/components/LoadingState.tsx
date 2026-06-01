@@ -40,7 +40,7 @@ export function LoadingState() {
             <li
               key={i}
               className={`text-sm transition-colors duration-300 ${
-                current ? "font-semibold text-ink" : done ? "text-muted" : "text-muted/50"
+                current ? "font-semibold text-ink" : done ? "text-muted" : "text-muted"
               }`}
             >
               {step}

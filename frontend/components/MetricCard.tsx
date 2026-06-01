@@ -10,7 +10,7 @@ export function MetricCard({ title, metric }: MetricCardProps) {
   return (
     <div className="rounded-lg border border-line bg-card p-4 shadow-warm">
       <div className="flex items-baseline justify-between">
-        <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.08em] text-muted">
+        <h3 className="type-label">
           {title}
         </h3>
         <span className="font-mono text-2xl font-bold text-primary">
@@ -30,10 +30,10 @@ export function MetricCard({ title, metric }: MetricCardProps) {
 
       {metric.strengths.length > 0 && (
         <div className="mt-3">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-positive">
+          <p className="font-mono text-xs uppercase tracking-[0.08em] text-positive">
             Strengths
           </p>
-          <ul className="mt-1 space-y-0.5 text-[0.8rem] leading-snug text-ink/85">
+          <ul className="mt-1 space-y-0.5 text-sm leading-snug text-ink">
             {metric.strengths.map((item, i) => (
               <li key={i} className="flex gap-2">
                 <span className="text-positive">+</span>
@@ -46,10 +46,10 @@ export function MetricCard({ title, metric }: MetricCardProps) {
 
       {metric.criticalWeaknesses.length > 0 && (
         <div className="mt-3">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-negative">
+          <p className="font-mono text-xs uppercase tracking-[0.08em] text-negative">
             Critical Weaknesses
           </p>
-          <ul className="mt-1 space-y-0.5 text-[0.8rem] leading-snug text-ink/85">
+          <ul className="mt-1 space-y-0.5 text-sm leading-snug text-ink">
             {metric.criticalWeaknesses.map((item, i) => (
               <li key={i} className="flex gap-2">
                 <span className="text-negative">!</span>

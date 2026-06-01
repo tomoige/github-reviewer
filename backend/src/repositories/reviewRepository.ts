@@ -1,4 +1,4 @@
-import { ReviewReport } from "../schemas/reviewSchema";
+import { ContributionCalendar, ReviewReport } from "../schemas/reviewSchema";
 import { ProfileBasics, LanguageScanMeta } from "../types/github";
 
 /**
@@ -11,6 +11,7 @@ export interface StoredReview {
   profile: ProfileBasics;
   report: ReviewReport;
   languageScan: LanguageScanMeta;
+  contributionCalendar: ContributionCalendar | null;
 }
 
 interface CachedEntry extends StoredReview {
@@ -32,7 +33,12 @@ export const reviewRepository = {
       store.delete(key(username));
       return null;
     }
-    return { profile: entry.profile, report: entry.report, languageScan: entry.languageScan };
+    return {
+      profile: entry.profile,
+      report: entry.report,
+      languageScan: entry.languageScan,
+      contributionCalendar: entry.contributionCalendar,
+    };
   },
 
   save(username: string, value: StoredReview): void {

@@ -62,7 +62,7 @@ export default function Home() {
             autoComplete="off"
             spellCheck={false}
             disabled={loading}
-            className="w-full rounded-lg border-2 border-line bg-cardAlt py-2.5 pl-8 pr-4 font-mono text-sm text-ink outline-none transition focus:border-primary focus:[box-shadow:0_0_0_3px_rgba(19,111,99,0.22)] disabled:opacity-60"
+            className="w-full rounded-lg border-2 border-lineStrong bg-cardAlt py-2.5 pl-8 pr-4 font-mono text-sm text-ink placeholder:text-muted outline-none transition focus:border-primary focus:[box-shadow:0_0_0_3px_rgba(19,111,99,0.22)] disabled:opacity-60"
           />
         </div>
         <button
@@ -78,7 +78,7 @@ export default function Home() {
         {loading && <LoadingState />}
 
         {error && !loading && (
-          <div className="mx-auto max-w-xl rounded-lg border border-negative/30 bg-negative/5 px-4 py-2.5 text-center text-sm text-negative">
+          <div className="mx-auto max-w-xl rounded-lg border border-negative/50 bg-negative/10 px-4 py-2.5 text-center text-sm font-medium text-negative">
             {error}
           </div>
         )}

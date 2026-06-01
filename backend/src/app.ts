@@ -6,6 +6,9 @@ import { errorHandler } from "./middleware/errorHandler";
 export function createApp(): Application {
   const app = express();
 
+  // Required for correct client IPs behind Railway, Render, Vercel proxies, etc.
+  app.set("trust proxy", 1);
+
   const origins = (process.env.CORS_ORIGIN ?? "http://localhost:3000")
     .split(",")
     .map((o) => o.trim())

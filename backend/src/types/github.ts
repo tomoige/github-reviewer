@@ -44,13 +44,14 @@ export interface GithubRepoSummary {
 export interface RepoLanguageEntry {
   name: string;
   language: string | null;
+  description: string | null;
   stars: number;
   pushedAt: string | null;
 }
 
 export interface GithubProfilePayload {
   profile: GithubProfile;
-  /** Most recently pushed repos selected for deep AI critique (README checks, etc.). */
+  /** Repos selected for deep AI critique (recent, standouts, and under-polished). */
   repositories: GithubRepoSummary[];
   /** Every public repo scanned for language inventory (may be capped). */
   allRepoLanguages: RepoLanguageEntry[];

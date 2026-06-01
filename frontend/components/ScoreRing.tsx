@@ -1,4 +1,4 @@
-import { ACCENT } from "@/lib/score";
+import { ACCENT, BORDER } from "@/lib/score";
 
 interface ScoreRingProps {
   score: number;
@@ -24,7 +24,7 @@ export function ScoreRing({ score, size = 120, label }: ScoreRingProps) {
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#CEC8B6"
+          stroke={BORDER}
           strokeWidth={stroke}
         />
         <circle
@@ -45,7 +45,7 @@ export function ScoreRing({ score, size = 120, label }: ScoreRingProps) {
           {clamped}
         </span>
         {label && (
-          <span className="mt-0.5 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-muted">
+          <span className="mt-0.5 font-mono text-xs uppercase tracking-[0.12em] text-muted">
             {label}
           </span>
         )}

@@ -12,11 +12,11 @@ const PRIORITY_ORDER: Record<RoadmapPriority, number> = {
 function priorityAccent(priority: RoadmapPriority): string {
   switch (priority) {
     case "High":
-      return "bg-negative/10 text-negative border-negative/30";
+      return "bg-negative/15 text-negative border-negative/50";
     case "Medium":
-      return "bg-primary/10 text-primary border-primary/30";
+      return "bg-primary/15 text-primaryDark border-primary/50";
     default:
-      return "bg-positive/10 text-positive border-positive/30";
+      return "bg-positive/15 text-positive border-positive/50";
   }
 }
 
@@ -43,7 +43,7 @@ export function Roadmap({
   return (
     <div className="rounded-lg border border-line bg-card p-4 shadow-warm">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-base font-bold text-ink">Personalized Roadmap</h2>
+        <h3 className="text-base font-bold text-ink">Personalized Roadmap</h3>
         <span className="font-mono text-xs text-muted">
           {completedCount}/{items.length} done
         </span>
@@ -66,13 +66,13 @@ export function Roadmap({
               <button
                 type="button"
                 onClick={() => toggle(i)}
-                className="flex h-full w-full items-start gap-2.5 rounded-lg border border-line bg-cardAlt p-2.5 text-left transition-colors hover:border-primary/40"
+                className="flex h-full w-full items-start gap-2.5 rounded-lg border border-line bg-cardAlt p-2.5 text-left transition-colors hover:border-primary/60"
               >
                 <span
                   className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 text-xs font-bold transition-colors ${
                     checked
                       ? "border-positive bg-positive text-cream"
-                      : "border-muted/60 bg-card text-transparent shadow-[inset_0_0_0_1px_rgba(28,20,16,0.06)]"
+                      : "border-lineStrong bg-card text-transparent"
                   }`}
                   aria-hidden
                 >
@@ -81,7 +81,7 @@ export function Roadmap({
                 <span className="flex-1">
                   <span
                     className={`text-sm ${
-                      checked ? "text-muted line-through" : "text-ink/90"
+                      checked ? "text-muted line-through" : "text-ink"
                     }`}
                   >
                     {item.task}
@@ -94,7 +94,7 @@ export function Roadmap({
                     >
                       {item.priority}
                     </span>
-                    <span className="rounded-full border border-line px-2 py-0.5 text-[11px] text-muted">
+                    <span className="rounded-full border border-line bg-card px-2 py-0.5 text-xs text-muted">
                       {item.category}
                     </span>
                   </span>
@@ -107,14 +107,14 @@ export function Roadmap({
 
       {roadmap.suggestedReadmeKeywords.length > 0 && (
         <div className="mt-4">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-muted">
+          <p className="type-label">
             Suggested README Keywords
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {roadmap.suggestedReadmeKeywords.map((kw, i) => (
               <span
                 key={i}
-                className="rounded-full border border-line bg-cardAlt px-3 py-1 font-mono text-xs text-muted"
+                className="rounded-full border border-line bg-card px-3 py-1 font-mono text-xs text-ink"
               >
                 {kw}
               </span>

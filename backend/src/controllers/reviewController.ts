@@ -2,6 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { getProfilePayload } from "../services/githubService";
 import { generateReview } from "../services/aiService";
 import { computeProfileCompleteness } from "../services/completenessService";
+import { computeActivitySnapshot } from "../services/activitySnapshotService";
+import { computePinRecommendations } from "../services/pinRecommendationService";
+import { buildRepositoryDeepDive } from "../services/repoDeepDiveService";
+import {
+  fetchContributionCalendar,
+  mergeLanguageBreakdown,
+} from "../services/profileInsightsService";
 import { reviewRepository } from "../repositories/reviewRepository";
 import { ReviewReport } from "../schemas/reviewSchema";
 import { GithubProfile, ProfileBasics } from "../types/github";
@@ -51,17 +58,42 @@ export async function createReview(
         profile: cached.profile,
         report: cached.report,
         languageScan: cached.languageScan,
+        contributionCalendar: cached.contributionCalendar,
       });
       return;
     }
 
     const payload = await getProfilePayload(rawUsername);
-    const llmReport = await generateReview(payload);
+    const [llmReport, contributionCalendar] = await Promise.all([
+      generateReview(payload),
+      fetchContributionCalendar(rawUsername),
+    ]);
 
-    // Merge the deterministic, code-computed completeness into the LLM report.
+    const {
+      languageBreakdownAnalysis: _llmLanguages,
+      repositoryEvaluations: _repoEvaluations,
+      ...llmRest
+    } = llmReport;
+
     const report: ReviewReport = {
-      ...llmReport,
+      ...llmRest,
+      repositoryDeepDive: buildRepositoryDeepDive(
+        llmReport.repositoryEvaluations,
+        payload.allRepoLanguages
+      ),
+      languageBreakdownAnalysis: mergeLanguageBreakdown(
+        llmReport,
+        payload.allRepoLanguages
+      ),
       profileCompleteness: computeProfileCompleteness(payload.profile),
+      activitySnapshot: computeActivitySnapshot(
+        payload.profile,
+        payload.allRepoLanguages
+      ),
+      pinRecommendations: computePinRecommendations(
+        payload.allRepoLanguages,
+        payload.repositories
+      ),
     };
     const profile = toProfileBasics(payload.profile);
 
@@ -69,6 +101,7 @@ export async function createReview(
       profile,
       report,
       languageScan: payload.languageScan,
+      contributionCalendar,
     });
 
     res.status(200).json({
@@ -77,6 +110,7 @@ export async function createReview(
       profile,
       report,
       languageScan: payload.languageScan,
+      contributionCalendar,
     });
   } catch (error) {
     next(error);

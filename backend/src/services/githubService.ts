@@ -7,9 +7,9 @@ import {
   RepoLanguageEntry,
   SocialAccount,
 } from "../types/github";
+import { selectRepoNamesForEvaluation } from "./repoSelectionService";
 
 const GITHUB_API = "https://api.github.com";
-const MAX_REPOS_FOR_REVIEW = 5;
 const MAX_REPOS_FOR_LANGUAGE_SCAN = 100;
 const PROFILE_README_MAX_CHARS = 2000;
 
@@ -238,6 +238,7 @@ async function fetchPublicRepoData(username: string): Promise<{
       allRepoLanguages.push({
         name: String(repo.name ?? ""),
         language: (repo.language as string) ?? null,
+        description: (repo.description as string) ?? null,
         stars: Number(repo.stargazers_count ?? 0),
         pushedAt: (repo.pushed_at as string) ?? null,
       });
@@ -251,30 +252,45 @@ async function fetchPublicRepoData(username: string): Promise<{
 }
 
 /**
- * Enriches the top N repos with README checks and full summary fields.
+ * Fetches full repo metadata for a single public repository.
  */
-async function enrichTopRepositories(
+async function fetchRepoSummary(
   username: string,
-  repoList: Array<Record<string, unknown>>
-): Promise<GithubRepoSummary[]> {
-  const top = repoList.slice(0, MAX_REPOS_FOR_REVIEW);
+  name: string
+): Promise<GithubRepoSummary | null> {
+  try {
+    const response = await githubFetch(
+      `/repos/${encodeURIComponent(username)}/${encodeURIComponent(name)}`
+    );
+    if (!response.ok) return null;
 
-  return Promise.all(
-    top.map(async (repo) => {
-      const name = String(repo.name ?? "");
-      return {
-        name,
-        description: (repo.description as string) ?? null,
-        language: (repo.language as string) ?? null,
-        stars: Number(repo.stargazers_count ?? 0),
-        forks: Number(repo.forks_count ?? 0),
-        hasReadme: await hasReadme(username, name),
-        updatedAt: String(repo.updated_at ?? ""),
-        pushedAt: (repo.pushed_at as string) ?? null,
-        topics: Array.isArray(repo.topics) ? (repo.topics as string[]) : [],
-      } satisfies GithubRepoSummary;
-    })
+    const repo = (await response.json()) as Record<string, unknown>;
+    const repoName = String(repo.name ?? name);
+
+    return {
+      name: repoName,
+      description: (repo.description as string) ?? null,
+      language: (repo.language as string) ?? null,
+      stars: Number(repo.stargazers_count ?? 0),
+      forks: Number(repo.forks_count ?? 0),
+      hasReadme: await hasReadme(username, repoName),
+      updatedAt: String(repo.updated_at ?? ""),
+      pushedAt: (repo.pushed_at as string) ?? null,
+      topics: Array.isArray(repo.topics) ? (repo.topics as string[]) : [],
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function enrichRepositoriesByNames(
+  username: string,
+  names: string[]
+): Promise<GithubRepoSummary[]> {
+  const results = await Promise.all(
+    names.map((name) => fetchRepoSummary(username, name))
   );
+  return results.filter((repo): repo is GithubRepoSummary => repo !== null);
 }
 
 async function fetchRepositories(username: string): Promise<{
@@ -282,8 +298,9 @@ async function fetchRepositories(username: string): Promise<{
   allRepoLanguages: RepoLanguageEntry[];
   languageScan: GithubProfilePayload["languageScan"];
 }> {
-  const { allRepoLanguages, firstPageRaw } = await fetchPublicRepoData(username);
-  const repositories = await enrichTopRepositories(username, firstPageRaw);
+  const { allRepoLanguages } = await fetchPublicRepoData(username);
+  const selectedNames = selectRepoNamesForEvaluation(allRepoLanguages);
+  const repositories = await enrichRepositoriesByNames(username, selectedNames);
 
   return {
     repositories,

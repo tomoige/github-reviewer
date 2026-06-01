@@ -8,7 +8,7 @@ export function SummaryCard({ summary }: { summary: string }) {
         </svg>
       </div>
 
-      <h2 className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.1em] text-cream/80">
+      <h2 className="font-mono text-xs font-bold uppercase tracking-[0.1em] text-cream">
         The Honest Assessment
       </h2>
       <p className="mt-2 max-w-3xl text-sm leading-relaxed text-summaryText">

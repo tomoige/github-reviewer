@@ -69,10 +69,9 @@ JSON
 },
 "languageBreakdownAnalysis": [
 {
-"language": "e.g., Java",
-"competencyRating": "Beginner | Intermediate | Advanced",
-"ratingRationale": "1-2 sentences citing repo evidence for why this rating was assigned.",
-"context": "How and where they use this language across their portfolio."
+"language": "e.g., TypeScript",
+"repoCount": 8,
+"competencyRating": "Beginner | Intermediate | Advanced"
 }
 ],
 "mostRecentRepositoriesEvaluated": [
@@ -95,6 +94,7 @@ JSON
 "suggestedReadmeKeywords": ["Keyword1", "Keyword2"]
 },
 "executiveSummary": "A concise, professional 2-4 sentence overview of the developer: who they are, their core strengths, and their overall trajectory (recruiter-facing, not a roast).",
+"suggestedProfileBio": "Paste-ready GitHub bio, max 160 characters.",
 "profileCompleteness": {
 "score": 65,
 "checklist": {
@@ -106,10 +106,38 @@ JSON
 "hasCompany": false
 },
 "missingHighImpactItems": ["Prioritized, friendly suggestions for the missing items above"]
+},
+"activitySnapshot": {
+"reposScanned": 23,
+"lastPushAt": "2026-05-28T12:00:00Z",
+"lastPushLabel": "3 days ago",
+"activeInLast90Days": 7,
+"dormantCount": 16,
+"activePercent": 30,
+"accountCreatedAt": "2019-04-12T00:00:00Z",
+"accountAgeLabel": "7 years on GitHub"
+},
+"pinRecommendations": [
+{
+"repoName": "my-best-project",
+"reason": "12 stars — social proof; has a README; recently updated",
+"stars": 12,
+"language": "TypeScript"
+}
+]
+},
+"contributionCalendar": {
+"totalContributions": 842,
+"weeks": [
+[
+{ "date": "2025-05-26", "count": 0, "level": 0 },
+{ "date": "2025-05-27", "count": 3, "level": 2 }
+]
+]
 }
 }
 
-Note: profileCompleteness is computed deterministically in code (not by the LLM) so the checklist is always factually accurate; the LLM produces every other field above.
+Note: profileCompleteness, activitySnapshot, pinRecommendations, languageBreakdownAnalysis (repo counts), and contributionCalendar are computed deterministically in code (not by the LLM) so they are always factually accurate; the LLM produces competency ratings for languages and every other narrative field above. contributionCalendar requires GITHUB_TOKEN (GraphQL API).
 
 4. Instructions for Cursor AI Execution
 When building from this specification, Cursor must strictly abide by these guardrails:

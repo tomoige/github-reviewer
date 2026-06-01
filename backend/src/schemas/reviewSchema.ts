@@ -28,11 +28,9 @@ export const reviewReportSchema = z.object({
     z.object({
       language: z.string(),
       competencyRating: z.enum(["Beginner", "Intermediate", "Advanced"]),
-      ratingRationale: z.string(),
-      context: z.string(),
     })
   ),
-  mostRecentRepositoriesEvaluated: z.array(
+  repositoryEvaluations: z.array(
     z.object({
       repoName: z.string(),
       impactScore: z.number().int().min(0).max(100),
@@ -52,6 +50,10 @@ export const reviewReportSchema = z.object({
     suggestedReadmeKeywords: z.array(z.string()),
   }),
   executiveSummary: z.string(),
+  suggestedProfileBio: z
+    .string()
+    .max(160)
+    .describe("Paste-ready GitHub bio, max 160 characters"),
 });
 
 /** The portion of the report produced by the LLM. */
@@ -74,7 +76,85 @@ export interface ProfileCompleteness {
   missingHighImpactItems: string[];
 }
 
-/** The full report returned by the API: LLM output + computed completeness. */
-export type ReviewReport = LlmReviewReport & {
+export interface ActivitySnapshot {
+  reposScanned: number;
+  lastPushAt: string | null;
+  lastPushLabel: string;
+  activeInLast90Days: number;
+  dormantCount: number;
+  activePercent: number;
+  accountCreatedAt: string;
+  accountAgeLabel: string;
+}
+
+export interface PinRecommendation {
+  repoName: string;
+  reason: string;
+  stars: number;
+  language: string | null;
+}
+
+export interface LanguageBreakdownEntry {
+  language: string;
+  repoCount: number;
+  competencyRating: "Beginner" | "Intermediate" | "Advanced";
+}
+
+export interface ContributionDay {
+  date: string;
+  count: number;
+  level: number;
+}
+
+export interface ContributionBreakdown {
+  commits: number;
+  pullRequests: number;
+  reviews: number;
+  issues: number;
+}
+
+export interface ContributionRepoSource {
+  fullName: string;
+  ownerLogin: string;
+  ownerType: "User" | "Organization";
+  isPrivate: boolean;
+  contributionCount: number;
+}
+
+export interface ContributionCalendar {
+  totalContributions: number;
+  weeks: ContributionDay[][];
+  /** True when the token owner matches the profile and private activity is included. */
+  includesPrivateContributions: boolean;
+  restrictedContributionCount?: number;
+  /** True when GitHub reports contributions the token cannot access. */
+  hasHiddenContributions: boolean;
+  breakdown: ContributionBreakdown;
+  repositories: ContributionRepoSource[];
+}
+
+export interface RepoEvaluation {
+  repoName: string;
+  impactScore: number;
+  visualVibe: string;
+  specificCritique: string;
+  priorityFix: string;
+}
+
+export interface RepositoryDeepDive {
+  mostRecent: RepoEvaluation[];
+  needsImprovement: RepoEvaluation[];
+  best: RepoEvaluation[];
+}
+
+/** The full report returned by the API: LLM output + computed fields. */
+export type ReviewReport = Omit<
+  LlmReviewReport,
+  "languageBreakdownAnalysis" | "repositoryEvaluations"
+> & {
+  languageBreakdownAnalysis: LanguageBreakdownEntry[];
+  repositoryDeepDive: RepositoryDeepDive;
   profileCompleteness: ProfileCompleteness;
+  activitySnapshot: ActivitySnapshot;
+  pinRecommendations: PinRecommendation[];
 };

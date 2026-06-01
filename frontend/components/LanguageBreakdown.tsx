@@ -8,19 +8,19 @@ function competencyAccent(
 ): string {
   switch (rating) {
     case "Advanced":
-      return "bg-positive/10 text-positive border-positive/30";
+      return "bg-positive/15 text-positive border-positive/50";
     case "Intermediate":
-      return "bg-primary/10 text-primary border-primary/30";
+      return "bg-primary/15 text-primaryDark border-primary/50";
     default:
-      return "bg-cardAlt text-muted border-line";
+      return "bg-card text-ink border-lineStrong";
   }
 }
 
 function scanSubtitle(scan: LanguageScanMeta): string {
   if (scan.truncated) {
-    return `Based on ${scan.reposScanned} of ${scan.totalPublicRepos} public repos (most recently pushed)`;
+    return `${scan.reposScanned} of ${scan.totalPublicRepos} repos scanned`;
   }
-  return `Based on all ${scan.reposScanned} public repos`;
+  return `${scan.reposScanned} repos scanned`;
 }
 
 export function LanguageBreakdown({
@@ -35,50 +35,45 @@ export function LanguageBreakdown({
   return (
     <div className="rounded-lg border border-line bg-card p-4 shadow-warm">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-base font-bold text-ink">Language Breakdown</h2>
+        <h3 className="text-base font-bold text-ink">Languages</h3>
         {languageScan && (
-          <p className="font-mono text-[0.65rem] text-muted">
+          <p className="font-mono text-xs text-muted">
             {scanSubtitle(languageScan)}
           </p>
         )}
       </div>
-      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {languages.map((lang, i) => (
-          <div key={i} className="rounded-lg border border-line bg-cardAlt p-3">
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-sm font-semibold text-ink">
-                {lang.language}
-              </span>
-              <span
-                className={`rounded-full border px-2 py-0.5 text-[0.65rem] font-medium ${competencyAccent(
-                  lang.competencyRating
-                )}`}
-              >
-                {lang.competencyRating}
-              </span>
-            </div>
 
-            <div className="mt-2">
-              <p className="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-muted">
-                Why this rating
-              </p>
-              <p className="mt-1 text-[0.8rem] leading-snug text-ink/90">
-                {lang.ratingRationale}
-              </p>
-            </div>
-
-            {lang.context && (
-              <div className="mt-2 border-t border-line/70 pt-2">
-                <p className="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-muted">
-                  Portfolio usage
-                </p>
-                <p className="mt-1 text-[0.8rem] leading-snug text-muted">
-                  {lang.context}
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full min-w-[320px] text-left text-sm">
+          <thead>
+            <tr className="border-b border-lineStrong font-mono text-xs uppercase tracking-[0.08em] text-muted">
+              <th className="pb-2 pr-4 font-medium">Language</th>
+              <th className="pb-2 pr-4 font-medium">Repos</th>
+              <th className="pb-2 font-medium">Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            {languages.map((lang) => (
+              <tr key={lang.language} className="border-b border-line last:border-0">
+                <td className="py-2.5 pr-4 font-mono font-semibold text-ink">
+                  {lang.language}
+                </td>
+                <td className="py-2.5 pr-4 font-mono text-ink">
+                  {lang.repoCount}
+                </td>
+                <td className="py-2.5">
+                  <span
+                    className={`inline-block rounded-full border px-2 py-0.5 text-xs font-medium ${competencyAccent(
+                      lang.competencyRating
+                    )}`}
+                  >
+                    {lang.competencyRating}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
