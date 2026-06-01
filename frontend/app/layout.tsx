@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -16,9 +17,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: "GitReview AI - Instant GitHub Profile Review",
   description:
     "Get an instant, structured AI review of any public GitHub profile.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({
